@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="这是随风前行github上的博客">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      ES6系统学习之let和const | cox-yj
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>cox-yj</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>ES6系统学习之let和const</h2>
+  <p class="post-date">2018-06-23</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="2-let和const命令"><a href="#2-let和const命令" class="headerlink" title="2.let和const命令"></a>2.let和const命令</h1><h2 id="1-let"><a href="#1-let" class="headerlink" title="1. let"></a>1. let</h2><p>let的用法类似于var,但只在当前代码块中有效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">1.</span><br><span class="line">    &#123;</span><br><span class="line">      let a = 10;</span><br><span class="line">      var b = 1;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    console.log(a) // ReferenceError: a is not defined.</span><br><span class="line">    console.log(b) // 1</span><br><span class="line"></span><br><span class="line">2.</span><br><span class="line">    var a = [];</span><br><span class="line">    for (var i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">      a[i] = function () &#123;</span><br><span class="line">        console.log(i);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    a[6](); // 10</span><br><span class="line">    </span><br><span class="line">    var a = [];</span><br><span class="line">    for (let i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">      a[i] = function () &#123;</span><br><span class="line">        console.log(i);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    a[6](); // 6</span><br></pre></td></tr></table></figure>
+<h5 id="不存在变量提升"><a href="#不存在变量提升" class="headerlink" title="不存在变量提升"></a>不存在变量提升</h5><p>什么叫做变量提升：<br>首先，在执行一个方法时，会先查找方法体中的function定义，然后找变量的定义；这些都找完后才开始执行,不理解的走<a href="https://github.com/mqyqingfeng/Blog/issues/8" target="_blank" rel="noopener">这里</a>，现在我们只说变量的声明：</p>
+<ul>
+<li>ES5<ol>
+<li>在方法体前先查看在方法中有没有变量声明，</li>
+<li>执行语句，在执行前如果在1中发现有变量声明(这里举例为 var a = 1),那么实际执行顺序会先执行一步 <em>var a</em>, 然后再去从上到下去执行方法中的语句</li>
+</ol>
+</li>
+<li>ES6　而ES6也会有ES5中的第一步，但它会假装没有执行第一步，直接按顺序执行方法中语句，后声明的变量会被当成没有声明处理。</li>
+</ul>
+<p>举例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">console.log(foo); // 输出undefined</span><br><span class="line">console.log(bar); // 报错ReferenceError</span><br><span class="line"></span><br><span class="line">var foo = 2;</span><br><span class="line">let bar = 2;</span><br></pre></td></tr></table></figure>
+<h5 id="暂时性死区"><a href="#暂时性死区" class="headerlink" title="暂时性死区"></a>暂时性死区</h5><p>只要块级作用域内存在let命令，它所声明的变量就“绑定”（binding）这个区域，不再受外部的影响。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 存在全局变量tmp，但是块级作用域内let又声明了一个局部变量tmp，导致后者绑定这个块级作用域，所以在let声明变量前，对tmp赋值会报错。</span><br><span class="line">var tmp = 123;</span><br><span class="line"></span><br><span class="line">if (true) &#123;</span><br><span class="line">  tmp = &apos;abc&apos;; // ReferenceError</span><br><span class="line">  let tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总之，在代码块内，使用let命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称TDZ）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">ES6:</span><br><span class="line">// 变量x使用let命令声明，所以在声明之前，</span><br><span class="line">// 都属于x的“死区”，只要用到该变量就会报错。</span><br><span class="line">// 因此，typeof运行时就会抛出一个ReferenceError。</span><br><span class="line">if (true) &#123;</span><br><span class="line">  // TDZ开始</span><br><span class="line">  tmp = &apos;abc&apos;; // ReferenceError</span><br><span class="line">  console.log(tmp); // ReferenceError</span><br><span class="line"></span><br><span class="line">  let tmp; // TDZ结束</span><br><span class="line">  console.log(tmp); // undefined</span><br><span class="line"></span><br><span class="line">  tmp = 123;</span><br><span class="line">  console.log(tmp); // 123</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ES5:</span><br><span class="line">if (true) &#123;</span><br><span class="line">  // TDZ开始</span><br><span class="line">  tmp = &apos;abc&apos;; </span><br><span class="line">  console.log(tmp); // abc</span><br><span class="line"></span><br><span class="line">  var tmp; // TDZ结束</span><br><span class="line">  console.log(tmp); // abc</span><br><span class="line"></span><br><span class="line">  tmp = 123;</span><br><span class="line">  console.log(tmp); // 123</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>值得注意的一点是，在ES6之前typeof是百分百安全的，但是ES6中在let定义该变量前使用typeof该变量会报错。</strong></p>
+<h6 id="有些“死区”比较隐蔽，不太容易发现："><a href="#有些“死区”比较隐蔽，不太容易发现：" class="headerlink" title="有些“死区”比较隐蔽，不太容易发现："></a>有些“死区”比较隐蔽，不太容易发现：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function bar(x = y, y = 2) &#123;</span><br><span class="line">  return [x, y];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 调用bar函数之所以报错，是因为参数x默认值等于另一个参数y，</span><br><span class="line">// 而此时y还没有声明，属于”死区“</span><br><span class="line">bar(); // 报错</span><br></pre></td></tr></table></figure>
+<h5 id="不允许重复声明"><a href="#不允许重复声明" class="headerlink" title="不允许重复声明"></a>不允许重复声明</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ES6:</span><br><span class="line">// 报错</span><br><span class="line">function () &#123;</span><br><span class="line">  let a = 10;</span><br><span class="line">  var a = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 报错</span><br><span class="line">function () &#123;</span><br><span class="line">  let a = 10;</span><br><span class="line">  let a = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ES5:</span><br><span class="line">// 不报错</span><br><span class="line">function () &#123;</span><br><span class="line">  var a = 10;</span><br><span class="line">  var a = 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-块级作用域"><a href="#2-块级作用域" class="headerlink" title="2.块级作用域"></a>2.块级作用域</h2><p>首先这是ES6新提出的一个规则</p>
+<hr>
+<h4 id="1-在ES5中"><a href="#1-在ES5中" class="headerlink" title="1.在ES5中"></a>1.在ES5中</h4><p>在ES5中只有全局作用域和函数作用域，如果只有这两个作用域会造成很多不合理的场景： </p>
+<ol>
+<li>内部变量可能会覆盖外层变量。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var tmp = &apos;bulabula&apos;;</span><br><span class="line"></span><br><span class="line">function f()&#123;</span><br><span class="line">// 在执行这个方法前，先检查出了有tmp的定义，</span><br><span class="line">// 所以在f的作用域中不使用外部的tmp</span><br><span class="line">  console.log(tmp);</span><br><span class="line">  if (false)&#123;</span><br><span class="line">    var tmp = &quot;hello world&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f() // undefined</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>用来计数的变量会泄漏为全局变量。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var s = &apos;hello&apos;;</span><br><span class="line"></span><br><span class="line">for (var i = 0; i &lt; s.length; i++)&#123;</span><br><span class="line">  console.log(s[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 实际i的作用只是用来控制循环，但循环结束后他并没有被回收</span><br><span class="line">console.log(i); // 5</span><br></pre></td></tr></table></figure>
+<h4 id="2-在ES6中"><a href="#2-在ES6中" class="headerlink" title="2.在ES6中"></a>2.在ES6中</h4><p>在ES6中不只有全局作用域和函数作用，let实际上为JavaScript新增了块级作用域</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function f1() &#123;</span><br><span class="line">  var n = 5;</span><br><span class="line">  if (true) &#123;</span><br><span class="line">    var n = 10;</span><br><span class="line">  &#125;</span><br><span class="line">  console.log(n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function f2() &#123;</span><br><span class="line">  let n = 5;</span><br><span class="line">  if (true) &#123;</span><br><span class="line">    // 这里定义的n只能在if判断中使用</span><br><span class="line">    let n = 10;</span><br><span class="line">  &#125;</span><br><span class="line">  console.log(n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f1() // 10</span><br><span class="line">f2() // 5</span><br></pre></td></tr></table></figure>
+<p>ES6允许块级作用域({})的单独使用,而且可以嵌套多层。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 这里外面四层&#123;&#125;只是为了说明可以嵌套多层</span><br><span class="line">&#123;&#123;&#123;&#123;</span><br><span class="line">  &#123;let insane = &apos;Hello World&apos;&#125;</span><br><span class="line">  console.log(insane); // 报错</span><br><span class="line">&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="但在ES6浏览器中会出现一下错误："><a href="#但在ES6浏览器中会出现一下错误：" class="headerlink" title="但在ES6浏览器中会出现一下错误："></a>但在ES6浏览器中会出现一下错误：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function f() &#123; console.log(&apos;I am outside!&apos;); &#125;</span><br><span class="line"></span><br><span class="line">(function () &#123;</span><br><span class="line">  if (false) &#123;</span><br><span class="line">    // 重复声明一次函数f</span><br><span class="line">    function f() &#123; console.log(&apos;I am inside!&apos;); &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  f();</span><br><span class="line">&#125;());</span><br></pre></td></tr></table></figure>
+<p>如果按照ES5去执行它的话他会打印I am inside!，理论上ES6会打印I am outside!。但是在ES6 浏览器实际执行中会报错： <em>f is not a function</em>。<br>这是为什么呢？ 实际上他的运行书序是这样的：</p>
+<ol>
+<li>先自执行函数中检测有没有函数、变量的声明，这时候if块作用域中的f声明也会被检测出来。</li>
+<li>代码开始前定义f（变量提升）</li>
+<li>开始执行函数体，因为f只是做了定义，并没有赋值，所以f是undefined。</li>
+</ol>
+<div style="background: #eee">     　　原来，如果改变了块级作用域内声明的函数的处理规则，显然会对老代码产生很大影响。为了减轻因此产生的不兼容问题，ES6 在附录 B里面规定，浏览器的实现可以不遵守上面的规定，有自己的行为方式。<br><br>- 允许在块级作用域内声明函数。<br>- 函数声明类似于var，即会提升到全局作用域或函数作用域的头部。<br>- 同时，函数声明还会提升到所在的块级作用域的头部。<br><br>.　　注意，上面三条规则只对 ES6 的浏览器实现有效，其他环境的实现不用遵守，还是将块级作用域的函数声明当作let处理。<br></div>
+
+<h2 id="3-const"><a href="#3-const" class="headerlink" title="3.const"></a>3.const</h2><p>．　　从本质上来说用const定义的变量要保证指向的内存地址不变，对于简单的数据类型(比如数值、字符串、布尔值等)，值就保存在那个地址，改变值就会改变内存指向；如果是复合类型(数组、对象)只要保证当前的对象地址不变，改变他其中的属性是没有问题的。</p>
+<hr>
+<h3 id="1-基本类型"><a href="#1-基本类型" class="headerlink" title="1.基本类型"></a>1.基本类型</h3><p>const声明的变量如果赋值为基本类型的值。一旦声明，常量的值就不能改变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const PI = 3.1415;</span><br><span class="line">PI // 3.1415</span><br><span class="line"></span><br><span class="line">PI = 3; // TypeError: Assignment to constant variable.</span><br><span class="line"></span><br><span class="line">// const定义的变量必须当场赋值</span><br><span class="line">const foo; // SyntaxError: Missing initializer in const declaration</span><br><span class="line"></span><br><span class="line">// 通let一样  const定义的变量必须先定义再使用</span><br><span class="line">if (true) &#123;</span><br><span class="line">  console.log(MAX); // ReferenceError</span><br><span class="line">  const MAX = 5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-复合类型"><a href="#2-复合类型" class="headerlink" title="2.复合类型"></a>2.复合类型</h3><p>const声明值为复合类型的变量，只要保证当前变量的地址指向不变，改变其属性是被允许的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const foo = &#123;&#125;;</span><br><span class="line">// 为 foo 添加一个属性，可以成功</span><br><span class="line">foo.prop = 123;</span><br><span class="line">foo.prop // 123</span><br><span class="line"></span><br><span class="line">// 将 foo 指向另一个对象，就会报错</span><br><span class="line">foo = &#123;&#125;; // TypeError: &quot;foo&quot; is read-only</span><br><span class="line"></span><br><span class="line">const a = [];</span><br><span class="line">a.push(&apos;Hello&apos;); // 可执行</span><br><span class="line">a.length = 0;    // 可执行</span><br><span class="line">a = [&apos;Dave&apos;];    // 报错</span><br></pre></td></tr></table></figure>
+<p>如果你想获得一个不能改变的对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// Object.freeze 作用是冻结一个对象 只能冻结该对象属性的简单类型</span><br><span class="line">const foo = Object.freeze(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">// 常规模式时，下面一行不起作用；</span><br><span class="line">// 严格模式时，该行会报错</span><br><span class="line">foo.prop = 123;</span><br><span class="line"></span><br><span class="line">// 除了将对象本身冻结，对象的属性也应该冻结。下面是一个将对象彻底冻结的函数。</span><br><span class="line"></span><br><span class="line">var constantize = (obj) =&gt; &#123;</span><br><span class="line">  Object.freeze(obj);</span><br><span class="line">  Object.keys(obj).forEach( (key, i) =&gt; &#123;</span><br><span class="line">    if ( typeof obj[key] === &apos;object&apos; ) &#123;</span><br><span class="line">      constantize( obj[key] );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#ES6" >
+    <span class="tag-code">ES6</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/06/23/ES6系统学习之Babel/">
+        <span class="nav-arrow">← </span>
+        
+          ES6系统学习之Babel
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/06/23/ES6系统学习之解构赋值/">
+        
+          ES6系统学习之解构赋值
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-let和const命令"><span class="toc-nav-text">2.let和const命令</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-let"><span class="toc-nav-text">1. let</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#不存在变量提升"><span class="toc-nav-text">不存在变量提升</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#暂时性死区"><span class="toc-nav-text">暂时性死区</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-6"><a class="toc-nav-link" href="#有些“死区”比较隐蔽，不太容易发现："><span class="toc-nav-text">有些“死区”比较隐蔽，不太容易发现：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#不允许重复声明"><span class="toc-nav-text">不允许重复声明</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-块级作用域"><span class="toc-nav-text">2.块级作用域</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1-在ES5中"><span class="toc-nav-text">1.在ES5中</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-在ES6中"><span class="toc-nav-text">2.在ES6中</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#但在ES6浏览器中会出现一下错误："><span class="toc-nav-text">但在ES6浏览器中会出现一下错误：</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-const"><span class="toc-nav-text">3.const</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-基本类型"><span class="toc-nav-text">1.基本类型</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-复合类型"><span class="toc-nav-text">2.复合类型</span></a></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://www.cox-yj.xin/2018/06/23/ES6系统学习之let和const/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "cox-yj";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "ES6系统学习之let和const",
+        owner: "cox-yj",
+        repo: "cox-yj.xin",
+        oauth: {
+          client_id: "fd3bb166ab6677fd330f",
+          client_secret: "136c24f12fc71cc22096fe74b6ccb6164f532250"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

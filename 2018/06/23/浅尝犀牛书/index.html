@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="这是随风前行github上的博客">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      浅尝犀牛书 | cox-yj
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>cox-yj</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>浅尝犀牛书</h2>
+  <p class="post-date">2018-06-23</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="方法借用"><a href="#方法借用" class="headerlink" title="方法借用"></a>方法借用</h1><p>.　　将一个对象的某个方法赋值给另一个对象，是另一个对象可以通过自己接收该方法的属性来调用该方法。例子：各种类型的的toString方法在实现上有些不一样，但对象的toSting方法可以判断变量的类型，如果我们想让其他类型用对象的toSting方法判断类型的话就可以借用对象的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// confused是一个不知道类型的变量</span><br><span class="line">confused.__proto__.toStrings = new Object().toString</span><br><span class="line">confused.toStrings() // [[object confused的实际类型]</span><br><span class="line">// 首先这个方法并不是最优选，因为他会修改confused的原型上的东西，而有些第三方库可能依赖这些原型，至于为</span><br><span class="line">//什么不加在confused自身的属性上是因为基础类型的属性被冻结了，不能修改，除非你用构造函数声明它：</span><br><span class="line">var confused = new String()</span><br><span class="line">// 最优：</span><br><span class="line">new Object().toString.call(confused)</span><br></pre></td></tr></table></figure>
+<p>.　　　　　　　　　　　　　　　　　　　　　　　　　–来自犀牛书226页 <span style="background: #c8c8c8; padding: 0 5px">9.6.5 方法借用</span></p>
+<h1 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h1><p>在定义构成函数主体时，构建函数代码是不会执行，只有在调用的时候才会执行。有四种方法可以调用js函数：</p>
+<ol>
+<li>作为函数</li>
+<li>作为方法</li>
+<li>作为构造函数</li>
+<li>通过call() 或则 apply()调用。</li>
+<li><span style="background: #c0c1c1">这里解释下函数和方法的区别，说白了，方法是对象的一个属性，它的值是一个函数。</span></li>
+</ol>
+<h3 id="作为函数的调用"><a href="#作为函数的调用" class="headerlink" title="作为函数的调用"></a>作为函数的调用</h3><p>一个调用表达式是由多个函数表达式组成的，每个函数表达式都是由函数对象、‘(’、参数列表和 ‘)’ 组成的。<br>在一个调用中，每一个参数表达式都会计算出一个值，计算出来的值作为实参转给声明函数是定义的形参。在函数体中存在一个形参的引用，==指向当前传入的<del>实参列表</del>==，通过他可以获得参数的值。<br><br><span style="background:#c0c1c1">上面黄色背景的字是我引用的原文，这里 实参列表 有些问题看代码： </span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 如果传参是复合类型，那这句话没有问题</span><br><span class="line">function fn (objs) &#123; objs.b++ &#125;</span><br><span class="line">var obj = &#123;a: 1, b: 2&#125;</span><br><span class="line">fn(obj)</span><br><span class="line">obj // &#123;a: 1, b: 3&#125;</span><br><span class="line"></span><br><span class="line">// 如果传参是基本类型，那这句话就有问题了</span><br><span class="line">function fn (b) &#123; b++ &#125;</span><br><span class="line">var a = 1</span><br><span class="line">fn(a)</span><br><span class="line">a // 1</span><br></pre></td></tr></table></figure>
+<p>所以这里应该是： 指向当前传入的浅拷贝后的实参列表。<br>如果你还是不太理解，可以看<a href="http://bosn.me/js/js-call-by-sharing/" target="_blank" rel="noopener">这里</a>，或者搜索关键字：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;call by value&quot;和&quot;call by  sharing&quot;</span><br></pre></td></tr></table></figure></p>
+<p>.　　　　　　　　　　　　　　　 –来自犀牛书168页 <span style="background: #c8c8c8; padding: 0 5px">8.2和8.2.1 函数调用</span></p>
+<h1 id="稀疏数组"><a href="#稀疏数组" class="headerlink" title="稀疏数组"></a>稀疏数组</h1><p>．　　稀疏数组就是从0开始的不连续索引的数组。在普通数组中属性length永远等于数组中元素个数，那我们可以这样定义稀疏数组：当一个数组中length大于数组元素的个数的话，那么这个数组就是一个稀疏数组。</p>
+<hr>
+<p>稀疏数组的创建,以下三种情况都会创建稀疏数组：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 1. 用构造函数声明</span><br><span class="line">let arr = new Array(5)</span><br><span class="line"></span><br><span class="line">// 2.用指定数组索引大于数组长度</span><br><span class="line">let arr1 = []</span><br><span class="line">arr1[100] = 1</span><br><span class="line"></span><br><span class="line">// 3.用delete产生</span><br><span class="line">let arr2 = [1, 2, 3]</span><br><span class="line">delete arr2[1]</span><br><span class="line"></span><br><span class="line">// 4. 特殊的 逗号后面的值时不存在的</span><br><span class="line">arr3 = [,]</span><br></pre></td></tr></table></figure>
+<p>但是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 这里a0也不是稀疏数组  因为他有个值undefined</span><br><span class="line">let a0 = [undefined]</span><br><span class="line">// 这里的a1就不是一个稀疏数组，他是有值的[undefined,undefined,undefined]</span><br><span class="line">let a1 = [,,,]  </span><br><span class="line">// 可以用 in 操作符来检测</span><br><span class="line">let a2 = new Array(5)</span><br><span class="line">0 in a1 // true</span><br><span class="line">0 in a2 // false</span><br></pre></td></tr></table></figure>
+<p>额外的,<br>看到这里时，突然想起一种遍历数组的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let arr = [1, 2, 3, 4, 5];</span><br><span class="line">for(var i = 0, item; item = arr[i++];;) &#123;</span><br><span class="line">    console.log(item) </span><br><span class="line">&#125;</span><br><span class="line">// 1</span><br><span class="line">// 2</span><br><span class="line">// 3</span><br><span class="line">// 4</span><br><span class="line">// 5</span><br></pre></td></tr></table></figure>
+<p>本意是只要遍历数组它本意是循环到超出数组长度 值是undefined时跳出循环。但是如果当前数组是个稀疏数组的话那么这个方法就会有问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Boolean(arr = 1) // true</span><br><span class="line">// 如果出现一下情况那么就会直接跳出循环</span><br><span class="line">Boolean(arr = undefined) // false</span><br><span class="line">Boolean(arr = null) // false</span><br><span class="line">Boolean(arr = false) // false</span><br><span class="line">Boolean(arr = 0) // false</span><br></pre></td></tr></table></figure>
+<p>所以这是方法可以在数组已知且不为假，或者是当当前元素为假是跳出循环时可以使用这个方法<br>.　　　　　　　　　　　　　　　 　　　　　　　　–来自犀牛书147页<span style="background: #c8c8c8; padding: 0 5px">7.3稀疏数组</span></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#JavaScript" >
+    <span class="tag-code">JavaScript</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/06/23/jQuery源码整体架构/">
+        <span class="nav-arrow">← </span>
+        
+          jQuery源码整体架构
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/06/23/ES6值得一看的总结/">
+        
+          ES6值得一看的总结
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#方法借用"><span class="toc-nav-text">方法借用</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#函数调用"><span class="toc-nav-text">函数调用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#作为函数的调用"><span class="toc-nav-text">作为函数的调用</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#稀疏数组"><span class="toc-nav-text">稀疏数组</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://www.cox-yj.xin/2018/06/23/浅尝犀牛书/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "cox-yj";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "浅尝犀牛书",
+        owner: "cox-yj",
+        repo: "cox-yj.xin",
+        oauth: {
+          client_id: "fd3bb166ab6677fd330f",
+          client_secret: "136c24f12fc71cc22096fe74b6ccb6164f532250"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

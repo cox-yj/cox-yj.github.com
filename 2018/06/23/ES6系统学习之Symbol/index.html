@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="这是随风前行github上的博客">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      ES6系统学习之Symbol | cox-yj
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>cox-yj</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>ES6系统学习之Symbol</h2>
+  <p class="post-date">2018-06-23</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="1-Symbol的定义和作用"><a href="#1-Symbol的定义和作用" class="headerlink" title="1.Symbol的定义和作用"></a>1.Symbol的定义和作用</h2><h3 id="1-定义："><a href="#1-定义：" class="headerlink" title="1.定义："></a>1.定义：</h3><p>首先Symbol不属于现有的六种类型中的任何一种，而是一种新的数据类型，表示独一无二的值。</p>
+<h3 id="2-为什么要引入Symbol类型："><a href="#2-为什么要引入Symbol类型：" class="headerlink" title="2.为什么要引入Symbol类型："></a>2.为什么要引入Symbol类型：</h3><p>在ES5中对象的属性名都是字符串，当你想要给一个已有的对象添加一个新的属性时有可能会将原有的属性覆盖掉。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let obj = &#123;</span><br><span class="line">    a： 1,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//给obj添加新的属性a</span><br><span class="line">obj.a = 3 // 这样就让原有的属性a给覆盖掉了</span><br></pre></td></tr></table></figure>
+<p>如果属性的名字都是独一无二的就不会有这种问题了，而Symbol就是用来解决这个问题的。</p>
+<hr>
+<p> 这样一来对象的属性就可以有两种类型了，一种是原本的字符串，一种是Symbol类型，而通过上面对Symbol的定义我们可以知道，只要是属性名是Symbol类型的，那么他就是唯一的，不会跟其他的属性名冲突。</p>
+<h3 id="3-Symbol的使用"><a href="#3-Symbol的使用" class="headerlink" title="3.Symbol的使用"></a>3.Symbol的使用</h3><h4 id="1-用Symbol函数生成无参数的。"><a href="#1-用Symbol函数生成无参数的。" class="headerlink" title="1.用Symbol函数生成无参数的。"></a>1.用Symbol函数生成无参数的。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let s1 = Symbol()</span><br><span class="line">let s2 = Symbol()</span><br><span class="line"></span><br><span class="line">typeof s1 // symbol</span><br><span class="line"></span><br><span class="line">s1 === s2 // false</span><br><span class="line">s1 == s2 // false</span><br></pre></td></tr></table></figure>
+<p>要注意的是Symbol函数前不用加new，因为生成Symbol的是一个原始类型的值，而不是一个对象。由于Symbol值不是一个对象，所以不能添加属性，他基本上可以说是一种类似字符串的类型。</p>
+<p><strong>这里说明一下：String 和 new String ()的区别：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">let str = &apos;abc&apos;</span><br><span class="line"></span><br><span class="line">let str1 = &apos;abc&apos;</span><br><span class="line"></span><br><span class="line">let strObj = new String(&apos;abc&apos;)</span><br><span class="line">let strObj1 = new String(&apos;abc&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">str == str1 // true</span><br><span class="line"></span><br><span class="line">str == strObj // false</span><br><span class="line"></span><br><span class="line">strObj == strObj1 // false</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">typeof str // string</span><br><span class="line"></span><br><span class="line">typeof strObj // object</span><br></pre></td></tr></table></figure>
+<ol>
+<li>str的创建过程：<ol>
+<li>先栈区创建str的引用</li>
+<li>然后在String池中去找值为 ‘abc’的对象，如果没有就创建一个，如果有str就直接指向这里的 ‘abc’</li>
+</ol>
+</li>
+<li>str1的创建过程：<ol>
+<li>先栈区创建st1的引用</li>
+<li>然后直接找到直接存在的’abc’的然后指向他。</li>
+</ol>
+</li>
+<li><p>strObj的创建过程：</p>
+<ol>
+<li>先栈区创建strObj的引用</li>
+<li>在堆中创建对象，strObj指向这个对象</li>
+</ol>
+</li>
+<li><p>strObj1的创建过程：</p>
+<ol>
+<li>先栈区创建strObj1的引用</li>
+<li>在堆中创建对象(而不是直接指向strObj创建的对象)，strObj1指向这个对象</li>
+</ol>
+</li>
+</ol>
+<h4 id="2-带参数的Symbol值"><a href="#2-带参数的Symbol值" class="headerlink" title="2.带参数的Symbol值"></a>2.带参数的Symbol值</h4><p>Symbol可以接受一个参数来作为对生成的Symbol进行描述。但是要注意的是就算参数一致他们也是不等的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 没有参数的情况</span><br><span class="line">let s1 = Symbol();</span><br><span class="line">let s2 = Symbol();</span><br><span class="line"></span><br><span class="line">s1 === s2 // false</span><br><span class="line"></span><br><span class="line">// 有参数的情况</span><br><span class="line">let s1 = Symbol(&apos;foo&apos;);</span><br><span class="line">let s2 = Symbol(&apos;foo&apos;);</span><br><span class="line"></span><br><span class="line">s1 === s2 // false</span><br></pre></td></tr></table></figure></p>
+<p>Symbol函数的参数只是表示对当前 Symbol 值的描述，因此相同参数的Symbol函数的返回值是不相等的。</p>
+<h4 id="3-一些特性"><a href="#3-一些特性" class="headerlink" title="3. 一些特性"></a>3. 一些特性</h4><ol>
+<li>Symbol 值不能与其他类型的值进行运算，会报错。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let sym = Symbol(&apos;My symbol&apos;);</span><br><span class="line"></span><br><span class="line">&quot;your symbol is &quot; + sym</span><br><span class="line">// TypeError: can&apos;t convert symbol to string</span><br><span class="line">`your symbol is $&#123;sym&#125;`</span><br><span class="line">// TypeError: can&apos;t convert symbol to string</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Symbol 值可以显式转为字符串。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let sym = Symbol(&apos;My symbol&apos;);</span><br><span class="line"></span><br><span class="line">String(sym) // &apos;Symbol(My symbol)&apos;</span><br><span class="line">sym.toString() // &apos;Symbol(My symbol)&apos;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Symbol 值也可以转为布尔值，但是不能转为数值。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">let sym = Symbol();</span><br><span class="line">Boolean(sym) // true</span><br><span class="line">!sym  // false</span><br><span class="line"></span><br><span class="line">let trues = Symbol(true)</span><br><span class="line">let falses = Symbol(false)</span><br><span class="line">!trues === !falses // true</span><br><span class="line"></span><br><span class="line">if (sym) &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Number(sym) // TypeError</span><br><span class="line">sym + 2 // TypeError</span><br></pre></td></tr></table></figure>
+<h3 id="3-作为属性名"><a href="#3-作为属性名" class="headerlink" title="3.作为属性名"></a>3.作为属性名</h3><ol>
+<li>用Symbol类型来作为对象key值多用于一个对象由多个模块构成的情况，这避免了某一个属性被覆盖或者改写。由于Symbol类型的特性，用其来做对象的key和常规的写法有一些区别：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">let mySymbol = Symbol();</span><br><span class="line"></span><br><span class="line">// 第一种写法</span><br><span class="line">let a = &#123;&#125;;</span><br><span class="line">a[mySymbol] = &apos;Hello!&apos;;</span><br><span class="line"></span><br><span class="line">// 第二种写法 如果不放在[] 中的话就会被解析为字符串</span><br><span class="line">let a = &#123;</span><br><span class="line">  [mySymbol]: &apos;Hello!&apos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 第三种写法</span><br><span class="line">let a = &#123;&#125;;</span><br><span class="line">Object.defineProperty(a, mySymbol, &#123; value: &apos;Hello!&apos; &#125;);</span><br><span class="line"></span><br><span class="line">// 以上写法都得到同样结果</span><br><span class="line">a[mySymbol] // &quot;Hello!&quot;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>要注意的是在使用Symbol为key的属性时，不能用点运算符，对象在用[]获取属性的时候要区别key加引号和不加引号的区别。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 情况1</span><br><span class="line">const mySymbol = Symbol();</span><br><span class="line">const a = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">a.mySymbol = &apos;Hello!&apos;;</span><br><span class="line">a[mySymbol] // undefined</span><br><span class="line">a[&apos;mySymbol&apos;] // &quot;Hello!&quot;</span><br><span class="line"></span><br><span class="line">// 情况2</span><br><span class="line">const mySymbol = Symbol();</span><br><span class="line">const a = &#123;</span><br><span class="line">    [mySymbol]: &apos;Hello!&apos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">a[mySymbol] // &quot;Hello!&quot;</span><br><span class="line">a[&apos;mySymbol&apos;] // undefined</span><br></pre></td></tr></table></figure>
+<p>看情况1点运算符后总是跟的字符串，这样的操作定义或修改的属性并没有用Symbol作为key。</p>
+<ol start="3">
+<li>作为常量，Symbol还可以定义一组值都不想等的常量。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">log.levels = &#123;</span><br><span class="line">  DEBUG: Symbol(&apos;debug&apos;),</span><br><span class="line">  INFO: Symbol(&apos;info&apos;),</span><br><span class="line">  WARN: Symbol(&apos;warn&apos;)</span><br><span class="line">&#125;;</span><br><span class="line">log(log.levels.DEBUG, &apos;debug message&apos;);</span><br><span class="line">log(log.levels.INFO, &apos;info message&apos;);</span><br></pre></td></tr></table></figure>
+<p>同时因为Symbol类型的特性，在switch循环中使用Symbol类型更加的合理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const COLOR_RED    = Symbol();</span><br><span class="line">const COLOR_GREEN  = Symbol();</span><br><span class="line"></span><br><span class="line">function getComplement(color) &#123;</span><br><span class="line">  switch (color) &#123;</span><br><span class="line">    case COLOR_RED:</span><br><span class="line">      return COLOR_GREEN;</span><br><span class="line">    case COLOR_GREEN:</span><br><span class="line">      return COLOR_RED;</span><br><span class="line">    default:</span><br><span class="line">      throw new Error(&apos;Undefined color&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-属性名的遍历"><a href="#4-属性名的遍历" class="headerlink" title="4.属性名的遍历"></a>4.属性名的遍历</h3><p>在有Symbol作为属性的对象中，这个一类型的属性不会被for…in、for…of遍历出来，而且也不会被Object.keys()、 Object.getOwnPropertyNames()、JSON.stringify()返回。<strong>但是它不是一个私有属性</strong>，用Object.getOwnPropertySymbols方法，可以获取指定对象的所有 Symbol 属性名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">let foo = Symbol(&quot;foo&quot;);</span><br><span class="line"></span><br><span class="line">const obj = &#123;</span><br><span class="line">    [foo]: &apos;foobar&apos;, </span><br><span class="line">    a: 1</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for (let i in obj) &#123;</span><br><span class="line">  console.log(i); // 无输出</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Object.getOwnPropertyNames()方法返回一个由指定对象的所有自身属性的属性</span><br><span class="line">// 名（包括不可枚举属性但不包括Symbol值作为名称的属性）组成的数组。</span><br><span class="line">Object.getOwnPropertyNames(obj)</span><br><span class="line">// []</span><br><span class="line"></span><br><span class="line">Object.getOwnPropertySymbols(obj)</span><br><span class="line">// [Symbol(foo)]</span><br></pre></td></tr></table></figure>
+<p>你也可以使用另一个新的API–Reflect.ownKeys获取所有的key，包括常规的和Symbol类型的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let obj = &#123;</span><br><span class="line">  [Symbol(&apos;my_key&apos;)]: 1,</span><br><span class="line">  enum: 2,</span><br><span class="line">  nonEnum: 3</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Reflect.ownKeys(obj)</span><br><span class="line">//  [&quot;enum&quot;, &quot;nonEnum&quot;, Symbol(my_key)]</span><br></pre></td></tr></table></figure>
+<h3 id="5-Symbol-for-，Symbol-keyFor"><a href="#5-Symbol-for-，Symbol-keyFor" class="headerlink" title="5.Symbol.for()，Symbol.keyFor()"></a>5.Symbol.for()，Symbol.keyFor()</h3><h4 id="1-Symbol-for"><a href="#1-Symbol-for" class="headerlink" title="1.Symbol.for()"></a>1.Symbol.for()</h4><p>有时候我们希望重新使用同一个Symbol值，Symbol.for()就用来做这个的，Symbol.for方法接受一个字符串作为参数，看是否有以该参数为名称的Symbol值，如果有就直接返回这个值，没有的话就创建一个并且返回。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let s1 = Symbol.for(&apos;foo&apos;);</span><br><span class="line">let s2 = Symbol.for(&apos;foo&apos;);</span><br><span class="line"></span><br><span class="line">s1 === s2 // true</span><br></pre></td></tr></table></figure>
+<p>但是要注意的是 Symbol方法和 Symbol.for方法是不互通的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let s1 = Symbol(&apos;foo&apos;);</span><br><span class="line">let s2 = Symbol.for(&apos;foo&apos;);</span><br><span class="line"></span><br><span class="line">s1 === s2 // false</span><br></pre></td></tr></table></figure>
+<p>由于Symbol()写法没有登记机制，所以每次调用都会返回一个不同的值，而Symbol.for方法会登记。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#ES6" >
+    <span class="tag-code">ES6</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/06/23/ES6系统学习之解构赋值/">
+        <span class="nav-arrow">← </span>
+        
+          ES6系统学习之解构赋值
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/06/23/ES6系统学习之Set-和-Map-数据结构/">
+        
+          ES6系统学习之Set 和 Map 数据结构
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-Symbol的定义和作用"><span class="toc-nav-text">1.Symbol的定义和作用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-定义："><span class="toc-nav-text">1.定义：</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-为什么要引入Symbol类型："><span class="toc-nav-text">2.为什么要引入Symbol类型：</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-Symbol的使用"><span class="toc-nav-text">3.Symbol的使用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1-用Symbol函数生成无参数的。"><span class="toc-nav-text">1.用Symbol函数生成无参数的。</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-带参数的Symbol值"><span class="toc-nav-text">2.带参数的Symbol值</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-一些特性"><span class="toc-nav-text">3. 一些特性</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-作为属性名"><span class="toc-nav-text">3.作为属性名</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-属性名的遍历"><span class="toc-nav-text">4.属性名的遍历</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-Symbol-for-，Symbol-keyFor"><span class="toc-nav-text">5.Symbol.for()，Symbol.keyFor()</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1-Symbol-for"><span class="toc-nav-text">1.Symbol.for()</span></a></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://www.cox-yj.xin/2018/06/23/ES6系统学习之Symbol/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "cox-yj";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "ES6系统学习之Symbol",
+        owner: "cox-yj",
+        repo: "cox-yj.xin",
+        oauth: {
+          client_id: "fd3bb166ab6677fd330f",
+          client_secret: "136c24f12fc71cc22096fe74b6ccb6164f532250"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

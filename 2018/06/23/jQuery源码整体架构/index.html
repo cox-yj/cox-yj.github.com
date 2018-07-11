@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="这是随风前行github上的博客">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      jQuery源码整体架构 | cox-yj
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>cox-yj</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>jQuery源码整体架构</h2>
+  <p class="post-date">2018-06-23</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="1-沙箱"><a href="#1-沙箱" class="headerlink" title="1.沙箱"></a>1.沙箱</h1><h5 id="jQuery中沙箱？"><a href="#jQuery中沙箱？" class="headerlink" title="jQuery中沙箱？"></a>jQuery中沙箱？</h5><ol>
+<li><p>用一个函数域包起来，就是所谓的沙箱在这里边 var 定义的变量，属于这个函数域内的局部变量，避免污染全局</p>
+</li>
+<li><p>把当前沙箱需要的外部变量通过函数参数引入进来只要保证参数对内提供的接口的一致性，你还可以随意替换传进来的这个参数</p>
+</li>
+</ol>
+<h5 id="jQuery源码："><a href="#jQuery源码：" class="headerlink" title="jQuery源码："></a>jQuery源码：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(function (window, undefined) &#123;</span><br><span class="line">&#125;)(window);</span><br></pre></td></tr></table></figure>
+<h5 id="在生产环境中："><a href="#在生产环境中：" class="headerlink" title="在生产环境中："></a>在生产环境中：</h5><p>在生产环境中，我们为了减少代码包的大小会压缩代码，而jQuery中压缩后是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// w -&gt; windwow , u -&gt; undefined</span><br><span class="line">(function(w, u) &#123;</span><br><span class="line">&#125;)(window);</span><br></pre></td></tr></table></figure>
+<p>由于undefined已经在一参数的形式传入了在代码中所有用到undefined的地方都会被u代替，可以在一定程度上减少代码量，<br>从而减少丫说版本的体积。</p>
+<h5 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h5><ol>
+<li><p>jQuery的所有代码都是包在这样一个自执行的匿名函数中，作用是为了防止变量污染，最终只将jQuery和$挂在在window上。</p>
+</li>
+<li><p>匿名函数接收两个参数window和undefined，而传参只有window，这里是为了保证undefined是undefined，因为在早期的环境中undefined是可以赋值的，这里是为了防止某些二货给undefined赋值造成的未知报错。</p>
+</li>
+<li><p>压缩代码后更大程度上减少代码量。</p>
+</li>
+</ol>
+<h1 id="常用方法保存"><a href="#常用方法保存" class="headerlink" title="常用方法保存"></a>常用方法保存</h1><h5 id="技术准备："><a href="#技术准备：" class="headerlink" title="技术准备："></a>技术准备：</h5><h6 id="1-call和apply"><a href="#1-call和apply" class="headerlink" title="1. call和apply:"></a>1. call和apply:</h6><p>　　</p>
+<ul>
+<li><p>他两的作用都是一样的，改变this的指向，第一个参数都是this要改变的指向，从第二个参数起, call方法参数将依次传递给借用的方法作参数, 而apply直接将这些参数放到一个数组中再传递, 最后借用方法的参数列表是一样的.<br></p>
+</li>
+<li><p>call, apply都属于Function.prototype的一个方法,它是JavaScript引擎内在实现的,因为属于Function.prototype,所以每个Function对象实例,也就是每个方法都有call, apply属性.既然作为方法的属性,那它们的使用就当然是针对方法的了.这两个方法是容易混淆的,因为它们的作用一样,只是使用方式不同.</p>
+</li>
+</ul>
+<p>图片－－－－－－－－－－－－－－－</p>
+<h6 id="２．类数组的定义："><a href="#２．类数组的定义：" class="headerlink" title="２．类数组的定义："></a>２．类数组的定义：</h6><ul>
+<li>拥有length属性，其它属性（索引）为非负整数(对象中的索引会被当做字符串来处理，这里你可以当做是个非负整数串来理解)</li>
+<li>不具有数组所具有的方法</li>
+</ul>
+<h5 id="jQuery源码：-1"><a href="#jQuery源码：-1" class="headerlink" title="jQuery源码："></a>jQuery源码：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class2type = &#123;&#125;,</span><br><span class="line">core_deletedIds = [],</span><br><span class="line">core_version = &quot;1.9.0&quot;,</span><br><span class="line">// 保存一写常用方法</span><br><span class="line">core_concat = core_deletedIds.concat,</span><br><span class="line">core_push = core_deletedIds.push,</span><br><span class="line">core_slice = core_deletedIds.slice,</span><br><span class="line">core_indexOf = core_deletedIds.indexOf,</span><br><span class="line">core_toString = class2type.toString,</span><br><span class="line">core_hasOwn = class2type.hasOwnProperty,</span><br><span class="line">core_trim = core_version.trim,</span><br></pre></td></tr></table></figure>
+<h5 id="总结：-1"><a href="#总结：-1" class="headerlink" title="总结："></a>总结：</h5><ol>
+<li>类数组也可使用数组的方法。</li>
+<li>减少计算步骤，提高性能；<br><br>例：<br><br> 　　调用数组实例的concat时：<br><br> 　　　1.先要判断实例的类型是不是Array，<br><br> 　　　2.其次在内存空间中找到Array的concat入口，<br><br> 　　　3.把当前的实例指针和参数加入栈，<br><br> 　　　4.然后跳转到concat地址开始执行；<br><br> 　　而保存了concat方法后，可以省去前两步</li>
+</ol>
+<h1 id="jQuery-无-new-构造"><a href="#jQuery-无-new-构造" class="headerlink" title="jQuery 无 new 构造"></a>jQuery 无 new 构造</h1><h5 id="技术准备：-1"><a href="#技术准备：-1" class="headerlink" title="技术准备："></a>技术准备：</h5><ol>
+<li><p>$或者jQuery: 构造函数，我们叫它–类</p>
+</li>
+<li><p>$(“app”):  正经的对象，它是$的实例。</p>
+</li>
+<li><p>在JavaScript中类也是一种特殊的对象。</p>
+</li>
+<li><p>类原型上的属性实例可以直接使用</p>
+</li>
+<li><p>类本身的属性实例是不能接直接调用的</p>
+</li>
+</ol>
+<h5 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h5><p>图片———————————</p>
+<h5 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">1.</span><br><span class="line">jQuery = function (selector, context) &#123;</span><br><span class="line">	// The jQuery object is actually just the init constructor &apos;enhanced&apos;</span><br><span class="line">	return new jQuery.fn.init(selector, context, rootjQuery);</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">2.</span><br><span class="line">jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">	// 版本</span><br><span class="line">	jquery: core_version,</span><br><span class="line"></span><br><span class="line">	constructor: jQuery,</span><br><span class="line">	init: function (selector, context, rootjQuery) &#123;</span><br><span class="line">	...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">3.</span><br><span class="line">jQuery.fn.init.prototype = jQuery.fn</span><br></pre></td></tr></table></figure>
+<h5 id="总结：-2"><a href="#总结：-2" class="headerlink" title="总结："></a>总结：</h5><ol>
+<li><p>根据以上的代码$(‘#app’)实际jQuery()是构造了jQuery.fn.init对象</p>
+</li>
+<li><p>通过代码中的第二段我们能够知道jQuery.fn = jQuery.prototype，在第三段中我们把jQuery的原型传递给了jQuery.fn.init</p>
+</li>
+<li><p>在jQuery.fn.init的this仍然指向jQuery.fn</p>
+</li>
+<li><p>那么new jQuery.fn.init 实际就等于 new jQuery</p>
+</li>
+<li><p>从而调用jQuery()方法 return new jQuery.fn.init，$(‘#app’)等价于new $(‘#app’)，因此实现无new 构造jQuery对象</p>
+</li>
+</ol>
+<h1 id="jQuery-fn-extend-与-jQuery-extend"><a href="#jQuery-fn-extend-与-jQuery-extend" class="headerlink" title="jQuery.fn.extend 与  jQuery.extend"></a>jQuery.fn.extend 与  jQuery.extend</h1><h5 id="使用：-1"><a href="#使用：-1" class="headerlink" title="使用："></a>使用：</h5><p>图片———————————</p>
+<h5 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 方法定义</span><br><span class="line">jQuery.extend = jQuery.fn.extend = function () &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 给jQuery类添加属性</span><br><span class="line">jQuery.extend(&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// 给jQuery类的原型添加属性</span><br><span class="line">jQuery.fn.extend(&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>1.在函数中this的指向：函数挂载在那个对象上就指向谁。</p>
+<p>2.jQuery.fn.extend 与  jQuery.extend在实现时共用了一个方法， 同一个方法却实现了不同的功能，这主要归功于JavaScript中this的强大了。</p>
+<p>3.前面说过，jQuery.fn = jQuery.prototype添加方法， jQuery.fn.extend 是给jQuery类的原型上去添加方法，也就是jQuery实例对象上添加方法。</p>
+<p>4.jQuery.extend是给jQuery这个类去添加方法。</p>
+<h1 id="jQuery-的链式调用及回溯"><a href="#jQuery-的链式调用及回溯" class="headerlink" title="jQuery 的链式调用及回溯"></a>jQuery 的链式调用及回溯</h1><h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div class=&quot;a&quot;&gt;1&lt;/div&gt;</span><br><span class="line">  &lt;div&gt;2&lt;/div&gt;</span><br><span class="line">  &lt;div&gt;3&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    $(&apos;div&apos;).eq(0).show().end().eq(1).hide();</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>图片————————-</p>
+<h5 id="源码-1"><a href="#源码-1" class="headerlink" title="源码"></a>源码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">	...</span><br><span class="line">	eq: function (i) &#123;</span><br><span class="line">		var len = this.length,</span><br><span class="line">			j = +i + (i &lt; 0 ? len : 0);</span><br><span class="line">		return this.pushStack(j &gt;= 0 &amp;&amp; j &lt; len ? [this[j]] : []);</span><br><span class="line">	&#125;,</span><br><span class="line"></span><br><span class="line">	end: function () &#123;</span><br><span class="line">		return this.prevObject || this.constructor(null);</span><br><span class="line">	&#125;,</span><br><span class="line">	...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h5><p>1.实现链式调用其实就是在调用的方法中返回this就可以了</p>
+<p>2.回溯的实现主要归功于jQuery实例中有prevObject 属性，它记录了调用前的对象。</p>
+<p>3.prevObject是由pushStack() 方法生成，他将一个DOM集合放入了jQuery内部管<br>理的一个栈中，就是prevObject</p>
+<p>4.当我们调用end()方法时，直接返回当前对象的prevObject就可以了。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#jQ" >
+    <span class="tag-code">jQ</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+    
+      <a class="nav-right" href="/2018/06/23/浅尝犀牛书/">
+        
+          浅尝犀牛书
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-沙箱"><span class="toc-nav-text">1.沙箱</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#jQuery中沙箱？"><span class="toc-nav-text">jQuery中沙箱？</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#jQuery源码："><span class="toc-nav-text">jQuery源码：</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#在生产环境中："><span class="toc-nav-text">在生产环境中：</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#总结："><span class="toc-nav-text">总结：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#常用方法保存"><span class="toc-nav-text">常用方法保存</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#技术准备："><span class="toc-nav-text">技术准备：</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-6"><a class="toc-nav-link" href="#1-call和apply"><span class="toc-nav-text">1. call和apply:</span></a></li><li class="toc-nav-item toc-nav-level-6"><a class="toc-nav-link" href="#２．类数组的定义："><span class="toc-nav-text">２．类数组的定义：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#jQuery源码：-1"><span class="toc-nav-text">jQuery源码：</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#总结：-1"><span class="toc-nav-text">总结：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#jQuery-无-new-构造"><span class="toc-nav-text">jQuery 无 new 构造</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#技术准备：-1"><span class="toc-nav-text">技术准备：</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#使用："><span class="toc-nav-text">使用：</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#源码："><span class="toc-nav-text">源码：</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#总结：-2"><span class="toc-nav-text">总结：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#jQuery-fn-extend-与-jQuery-extend"><span class="toc-nav-text">jQuery.fn.extend 与  jQuery.extend</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#使用：-1"><span class="toc-nav-text">使用：</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#源码"><span class="toc-nav-text">源码</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#总结"><span class="toc-nav-text">总结</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#jQuery-的链式调用及回溯"><span class="toc-nav-text">jQuery 的链式调用及回溯</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#使用"><span class="toc-nav-text">使用</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#源码-1"><span class="toc-nav-text">源码</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#总结-1"><span class="toc-nav-text">总结</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://www.cox-yj.xin/2018/06/23/jQuery源码整体架构/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "cox-yj";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "jQuery源码整体架构",
+        owner: "cox-yj",
+        repo: "cox-yj.xin",
+        oauth: {
+          client_id: "fd3bb166ab6677fd330f",
+          client_secret: "136c24f12fc71cc22096fe74b6ccb6164f532250"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
